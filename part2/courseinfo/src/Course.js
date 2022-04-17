@@ -7,9 +7,9 @@ const CourseHeader = ({ name }) => {
 const Content = ({ parts }) => {
     return (
         <div>
-        {parts.map(part => 
-            <Part key={parts.id} part={part} />
-        )}
+            {parts.map(part => 
+                <Part key={part.id} part={part} />
+            )}
         </div>
     )
 }
