@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import personService from './services/persons'
 
-const PersonForm = ({ persons, setPersons }) => {
+const PersonForm = ({ persons, setPersons, setErrorMessage, setMessageClass }) => {
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
   
@@ -24,8 +24,26 @@ const PersonForm = ({ persons, setPersons }) => {
             personService
             .update(foundPerson.id, changedPerson)
             .then(returnedPerson => {
-                console.log(`${newName} had been updated`)
+                console.log(`Updated ${newName}`)
                 setPersons(persons.map(person => person.id !== foundPerson.id ? person : returnedPerson))
+                setErrorMessage(
+                    `Updated '${foundPerson.name}'`
+                )
+                setMessageClass('notification')
+                setTimeout(() => {
+                    setErrorMessage(null)
+                    setMessageClass(null)
+                }, 5000)
+            })
+            .catch(error => {
+                setErrorMessage(
+                  `Error happened while updating '${foundPerson.name}'`
+                )
+                setMessageClass('error')
+                setTimeout(() => {
+                    setErrorMessage(null)
+                    setMessageClass(null)
+                }, 5000)
             })
         }
         // alert(`${newName} is already added to phonebook`)
@@ -40,6 +58,14 @@ const PersonForm = ({ persons, setPersons }) => {
         .create(personObject)
         .then(returnedPerson => {
             setPersons(persons.concat(returnedPerson))
+            setErrorMessage(
+                `Added' ${returnedPerson.name}'`
+            )
+            setMessageClass('notification')
+            setTimeout(() => {
+                setErrorMessage(null)
+                setMessageClass(null)
+            }, 5000)
             // setNewName('')
             // setNewNumber('')
         })

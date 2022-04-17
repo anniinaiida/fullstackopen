@@ -12,7 +12,7 @@ const Person = ({ person }) => {
     )
 }
 
-const Persons = ({ persons, showAll, filterText, setPersons }) => {
+const Persons = ({ persons, showAll, filterText, setPersons, setErrorMessage, setMessageClass }) => {
 
     const numbersToShow = showAll
     ? persons
@@ -25,6 +25,24 @@ const Persons = ({ persons, showAll, filterText, setPersons }) => {
             .then(response => {
                 console.log(`${name} had been deleted`)
                 setPersons(persons.filter(n => n.id !== id))
+                setErrorMessage(
+                    `Deleted '${name}'`
+                )
+                setMessageClass('notification')
+                setTimeout(() => {
+                    setErrorMessage(null)
+                    setMessageClass(null)
+                }, 5000)
+            })
+            .catch(error => {
+                setErrorMessage(
+                  `Information of '${name}' has already been removed from server`
+                )
+                setMessageClass('error')
+                setTimeout(() => {
+                    setErrorMessage(null)
+                    setMessageClass(null)
+                }, 5000)
             })
         }
     }
